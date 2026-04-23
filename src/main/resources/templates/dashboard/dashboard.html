@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f6f9;
+        }
+
+        .card {
+            border-radius: 12px;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+        }
+
+        .title {
+            font-weight: 600;
+        }
+
+        .big-number {
+            font-size: 28px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">Construction Dashboard</h2>
+
+    <!-- TOP CARDS -->
+    <div class="row g-3">
+
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <div class="title">Total Clients</div>
+                <div class="big-number" th:text="${totalClients}"></div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <div class="title">Active Clients</div>
+                <div class="big-number" th:text="${activeClients}"></div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <div class="title">Total Projects</div>
+                <div class="big-number" th:text="${totalProjects}"></div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <div class="title">Active Projects</div>
+                <div class="big-number" th:text="${activeProjects}"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- FINANCIAL SECTION -->
+    <div class="row mt-4 g-3">
+
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm">
+                <div class="title text-success">Revenue</div>
+                <div class="big-number" th:text="${revenue}"></div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm">
+                <div class="title text-danger">Expenses</div>
+                <div class="big-number" th:text="${expense}"></div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm">
+                <div class="title text-primary">Pending / Profit</div>
+                <div class="big-number" th:text="${pending}"></div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

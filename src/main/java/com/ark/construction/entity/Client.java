@@ -13,6 +13,7 @@ public class Client {
     private String phone;
     private String email;
     private String address;
+    private boolean active = true;
 
     // Getters & Setters
     public Long getId() { return id; }
@@ -34,4 +35,12 @@ public class Client {
     public String getAddress() { return address; }
 
     public void setAddress(String address) { this.address = address; }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

@@ -16,7 +16,7 @@ public class ClientService {
     }
 
     public List<Client> getAllClients() {
-        return repository.findAll();
+        return repository.findByActiveTrue();
     }
 
     public Client saveClient(Client client) {
@@ -24,7 +24,11 @@ public class ClientService {
     }
 
     public void deleteClient(Long id) {
-        repository.deleteById(id);
+        Client client = repository.findById(id).orElse(null);
+        if (client != null) {
+            client.setActive(false);   // 👈 soft delete
+            repository.save(client);
+        }
     }
 
     public Client getClientById(Long id) {

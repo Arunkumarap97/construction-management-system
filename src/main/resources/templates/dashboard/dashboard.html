@@ -13,10 +13,12 @@
         .card {
             border-radius: 12px;
             transition: 0.2s;
+            cursor: pointer; /* 🔥 makes cards clickable */
         }
 
         .card:hover {
             transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.1); /* 🔥 premium hover effect */
         }
 
         .title {
@@ -40,31 +42,39 @@
     <div class="row g-3">
 
         <div class="col-md-3">
-            <div class="card p-3 shadow-sm">
-                <div class="title">Total Clients</div>
-                <div class="big-number" th:text="${totalClients}"></div>
-            </div>
+            <a href="/clients" style="text-decoration: none; color: inherit;">
+                <div class="card p-3 shadow-sm">
+                    <div class="title">Total Clients</div>
+                    <div class="big-number" th:text="${totalClients}"></div>
+                </div>
+            </a>
         </div>
 
         <div class="col-md-3">
-            <div class="card p-3 shadow-sm">
-                <div class="title">Active Clients</div>
-                <div class="big-number" th:text="${activeClients}"></div>
-            </div>
+            <a href="/clients" style="text-decoration: none; color: inherit;">
+                <div class="card p-3 shadow-sm">
+                    <div class="title">Active Clients</div>
+                    <div class="big-number" th:text="${activeClients}"></div>
+                </div>
+            </a>
         </div>
 
         <div class="col-md-3">
-            <div class="card p-3 shadow-sm">
-                <div class="title">Total Projects</div>
-                <div class="big-number" th:text="${totalProjects}"></div>
-            </div>
+            <a href="/projects" style="text-decoration: none; color: inherit;">
+                <div class="card p-3 shadow-sm">
+                    <div class="title">Total Projects</div>
+                    <div class="big-number" th:text="${totalProjects}"></div>
+                </div>
+            </a>
         </div>
 
         <div class="col-md-3">
-            <div class="card p-3 shadow-sm">
-                <div class="title">Active Projects</div>
-                <div class="big-number" th:text="${activeProjects}"></div>
-            </div>
+            <a href="/projects" style="text-decoration: none; color: inherit;">
+                <div class="card p-3 shadow-sm">
+                    <div class="title">Active Projects</div>
+                    <div class="big-number" th:text="${activeProjects}"></div>
+                </div>
+            </a>
         </div>
 
     </div>
@@ -73,17 +83,21 @@
     <div class="row mt-4 g-3">
 
         <div class="col-md-4">
-            <div class="card p-3 shadow-sm">
-                <div class="title text-success">Revenue</div>
-                <div class="big-number" th:text="${revenue}"></div>
-            </div>
+            <a href="/projects" style="text-decoration: none; color: inherit;">
+                <div class="card p-3 shadow-sm">
+                    <div class="title text-success">Revenue</div>
+                    <div class="big-number" th:text="${revenue}"></div>
+                </div>
+            </a>
         </div>
 
         <div class="col-md-4">
-            <div class="card p-3 shadow-sm">
-                <div class="title text-danger">Expenses</div>
-                <div class="big-number" th:text="${expense}"></div>
-            </div>
+            <a href="/expenses" style="text-decoration: none; color: inherit;">
+                <div class="card p-3 shadow-sm">
+                    <div class="title text-danger">Expenses</div>
+                    <div class="big-number" th:text="${expense}"></div>
+                </div>
+            </a>
         </div>
 
         <div class="col-md-4">

@@ -12,4 +12,11 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
     @Query("SELECT COALESCE(SUM(p.amount), 0) FROM Payment p WHERE p.project.id = :projectId")
     Double totalPaidByProject(@Param("projectId") Long projectId);
+
+    @Query("""
+        SELECT COALESCE(SUM(p.amount), 0)
+        FROM Payment p
+        WHERE p.project.id = :projectId
+    """)
+    Double getTotalPaidByProject(Long projectId);
 }

@@ -27,6 +27,17 @@ public class Project {
     @JoinColumn(name = "client_id")
     private Client client;
 
+    @Transient
+    private Long clientId;
+
+    public Long getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(Long clientId) {
+        this.clientId = clientId;
+    }
+
     @OneToMany(mappedBy = "project")
     private List<Payment> payments;
 

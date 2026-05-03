@@ -1,26 +1,32 @@
 package com.ark.construction.entity;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
 
 @Entity
 public class Expense {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String type;
+    private LocalDate expenseDate;
+
+    private String category;
+
+    private String vendorName;
 
     private Double amount;
-
-    private LocalDate expenseDate;
 
     private String note;
 
     @ManyToOne
     @JoinColumn(name = "project_id")
     private Project project;
+
+    // helper field for form dropdown
+    @Transient
+    private Long projectId;
 
     public Long getId() {
         return id;
@@ -30,12 +36,28 @@ public class Expense {
         this.id = id;
     }
 
-    public String getType() {
-        return type;
+    public LocalDate getExpenseDate() {
+        return expenseDate;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setExpenseDate(LocalDate expenseDate) {
+        this.expenseDate = expenseDate;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
     }
 
     public Double getAmount() {
@@ -44,14 +66,6 @@ public class Expense {
 
     public void setAmount(Double amount) {
         this.amount = amount;
-    }
-
-    public LocalDate getExpenseDate() {
-        return expenseDate;
-    }
-
-    public void setExpenseDate(LocalDate expenseDate) {
-        this.expenseDate = expenseDate;
     }
 
     public String getNote() {
@@ -68,5 +82,13 @@ public class Expense {
 
     public void setProject(Project project) {
         this.project = project;
+    }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
     }
 }

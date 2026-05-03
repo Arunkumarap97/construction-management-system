@@ -33,7 +33,7 @@
 </head>
 
 <body>
-
+<div th:replace="fragments/navbar :: navbar"></div>
 <div class="container mt-4">
 
     <h2 class="mb-4">Construction Dashboard</h2>
@@ -42,7 +42,7 @@
     <div class="row g-3">
 
         <div class="col-md-3">
-            <a href="/clients" style="text-decoration: none; color: inherit;">
+            <a href="/clients/all" style="text-decoration: none; color: inherit;">
                 <div class="card p-3 shadow-sm">
                     <div class="title">Total Clients</div>
                     <div class="big-number" th:text="${totalClients}"></div>
@@ -110,6 +110,6 @@
     </div>
 
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

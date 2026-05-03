@@ -16,9 +16,16 @@
             this.service = service;
         }
 
-        // LIST ALL CLIENTS
+        // LIST ALL ACTIVE CLIENTS
         @GetMapping
-        public String listClients(Model model) {
+        public String listActiveClients(Model model) {
+            model.addAttribute("clients", service.getAllActiveClients());
+            return "clients";
+        }
+
+        // LIST ALL CLIENTS
+        @GetMapping("/all")
+        public String listAllClients(Model model) {
             model.addAttribute("clients", service.getAllClients());
             return "clients";
         }
@@ -44,9 +51,20 @@
             return "redirect:/clients";
         }
 
-        @GetMapping("/test")
-    @ResponseBody
-    public String test() {
-        return "Working";
-    }
+        @GetMapping("/{id}")
+        public String clientDetail(@PathVariable Long id, Model model) {
+
+            Client client = service.getClientById(id);
+
+            model.addAttribute("client", client);
+            model.addAttribute("projects", service.getProjectsOfClient(id));
+            model.addAttribute("totalProjects", service.totalProjects(id));
+            model.addAttribute("totalProjectCost", service.totalProjectCost(id));
+            model.addAttribute("totalReceived", service.totalReceived(id));
+            model.addAttribute("pendingAmount", service.pendingAmount(id));
+            model.addAttribute("payments", service.getAllPaymentsOfClient(id));
+
+            return "client/client-detail";
+        }
+
     }

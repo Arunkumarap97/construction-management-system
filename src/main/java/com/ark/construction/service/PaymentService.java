@@ -57,4 +57,9 @@ public class PaymentService {
 
         return "success";
     }
+    //
+
+    public Payment getPaymentById(Long id) {
+        return paymentRepo.findById(id).orElseThrow();
+    }
 }

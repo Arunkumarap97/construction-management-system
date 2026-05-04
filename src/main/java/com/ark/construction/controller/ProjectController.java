@@ -6,7 +6,10 @@ import com.ark.construction.entity.Project;
 import com.ark.construction.repository.ClientRepository;
 import com.ark.construction.service.ExpenseService;
 import com.ark.construction.service.PaymentService;
+import com.ark.construction.service.PdfService;
 import com.ark.construction.service.ProjectService;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,14 +23,16 @@ public class ProjectController {
     private final PaymentService paymentService;
     private final ClientRepository clientRepo;
     private final ExpenseService expenseService;
+    private final PdfService pdfService;
 
     public ProjectController(ProjectService projectService,
                              PaymentService paymentService,
-                             ClientRepository clientRepo, ExpenseService expenseService) {
+                             ClientRepository clientRepo, ExpenseService expenseService, PdfService pdfService) {
         this.projectService = projectService;
         this.paymentService = paymentService;
         this.clientRepo = clientRepo;
         this.expenseService = expenseService;
+        this.pdfService = pdfService;
     }
 
     // 🔹 LIST PROJECTS
@@ -149,5 +154,31 @@ public class ProjectController {
         redirectAttributes.addFlashAttribute("success", "Expense added successfully!");
 
         return "redirect:/projects/" + id;
+    }
+
+    @GetMapping("/payments/{paymentId}/receipt")
+    @ResponseBody
+    public ResponseEntity<byte[]> downloadReceipt(@PathVariable Long paymentId) {
+
+        Payment payment = paymentService.getPaymentById(paymentId);
+
+        byte[] pdf = pdfService.generatePaymentReceipt(payment);
+
+        String projectName = payment.getProject().getProjectName();
+
+// 🔥 sanitize filename
+        projectName = projectName.replaceAll("[^a-zA-Z0-9]", "_");
+
+// optional: shorten
+        if (projectName.length() > 30) {
+            projectName = projectName.substring(0, 30);
+        }
+
+        String fileName = projectName + "_Payment_" + payment.getPaymentDate() + ".pdf";
+
+        return ResponseEntity.ok()
+                .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
+                .contentType(MediaType.APPLICATION_PDF)
+                .body(pdf);
     }
 }

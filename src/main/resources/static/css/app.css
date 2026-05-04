@@ -1,0 +1,369 @@
+/* =========================
+   GLOBAL LAYOUT
+========================= */
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    background: linear-gradient(to right, #f8f9fa, #eef2f7);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.container {
+    flex: 1;
+}
+
+footer {
+    margin-top: auto;
+    padding: 20px;
+    text-align: center;
+    font-size: 13px;
+    color: #777;
+}
+
+/* =========================
+   PAGE TITLES / HEADERS
+========================= */
+
+.page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #222;
+}
+
+.sub-title,
+.sub-text {
+    color: #777;
+    font-size: 14px;
+}
+
+.sub-text {
+    margin-bottom: 25px;
+}
+
+.top-box {
+    margin-bottom: 25px;
+}
+
+.count-badge {
+    background: #0d6efd;
+    color: white;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    margin-left: 10px;
+}
+
+/* =========================
+   COMMON CARDS
+========================= */
+
+.card {
+    border-radius: 12px;
+}
+
+.list-card {
+    background: #fff;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.07);
+    overflow: hidden;
+}
+
+.client-card,
+.project-card,
+.expense-card {
+    border: none;
+    border-radius: 20px;
+    padding: 35px;
+    background: #ffffff;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.08);
+}
+
+/* =========================
+   FORMS
+========================= */
+
+.form-title {
+    font-weight: 700;
+    font-size: 28px;
+}
+
+.client-card .form-title {
+    color: #0d6efd;
+}
+
+.project-card .form-title {
+    color: #198754;
+}
+
+.expense-card .form-title {
+    color: #dc3545;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 6px;
+}
+
+.form-control,
+.form-select {
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid #dcdcdc;
+}
+
+.form-control:focus,
+.form-select:focus {
+    box-shadow: none;
+}
+
+.client-card .form-control:focus {
+    border-color: #0d6efd;
+}
+
+.project-card .form-control:focus,
+.project-card .form-select:focus {
+    border-color: #198754;
+}
+
+.expense-card .form-control:focus,
+.expense-card .form-select:focus {
+    border-color: #dc3545;
+}
+
+/* =========================
+   ICON CIRCLES
+========================= */
+
+.icon-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    margin: 0 auto 15px auto;
+}
+
+.client-card .icon-circle {
+    background: #e8f1ff;
+    color: #0d6efd;
+}
+
+.project-card .icon-circle {
+    background: #e5fff0;
+    color: #198754;
+}
+
+.expense-card .icon-circle {
+    background: #ffe5e8;
+    color: #dc3545;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+
+.btn-add {
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+.btn-sm {
+    border-radius: 10px;
+    padding: 4px 10px;
+}
+
+.btn-save {
+    border-radius: 12px;
+    padding: 10px 30px;
+    font-weight: 600;
+    border: none;
+}
+
+.client-card .btn-save {
+    background: #0d6efd;
+}
+
+.client-card .btn-save:hover {
+    background: #0b5ed7;
+}
+
+.project-card .btn-save {
+    background: #198754;
+}
+
+.project-card .btn-save:hover {
+    background: #157347;
+}
+
+.expense-card .btn-save {
+    background: #dc3545;
+}
+
+.expense-card .btn-save:hover {
+    background: #bb2d3b;
+}
+
+.btn-back {
+    border-radius: 12px;
+    padding: 10px 25px;
+}
+
+/* =========================
+   TABLES
+========================= */
+
+.table {
+    margin: 0;
+}
+
+.table thead {
+    background: #f7f8fa;
+}
+
+.table th {
+    padding: 18px;
+    font-size: 14px;
+    color: #555;
+    border: none;
+}
+
+.table td {
+    padding: 18px;
+    vertical-align: middle;
+    border-top: 1px solid #f1f1f1;
+}
+
+.table tbody tr:hover {
+    background: #fafcff;
+}
+
+/* =========================
+   TEXT HELPERS
+========================= */
+
+.project-name {
+    font-weight: 600;
+    color: #0d6efd;
+}
+
+.cost {
+    font-weight: 600;
+    color: #198754;
+}
+
+.amount-red {
+    color: #dc3545;
+    font-weight: 700;
+}
+
+.big {
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.title {
+    font-weight: 600;
+}
+
+.big-number {
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* =========================
+   BADGES
+========================= */
+
+.badge-ongoing {
+    background: #fff4d8;
+    color: #c58a00;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-completed {
+    background: #e7f8ee;
+    color: #198754;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-cat {
+    background: #eef3ff;
+    color: #0d6efd;
+    padding: 6px 14px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* =========================
+   DASHBOARD
+========================= */
+
+.dashboard-card,
+.card-clickable {
+    border-radius: 12px;
+    transition: 0.2s;
+    cursor: pointer;
+}
+
+.dashboard-card:hover,
+.card-clickable:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+}
+
+/* =========================
+   EXPENSE SUMMARY
+========================= */
+
+.summary-line {
+    margin: 15px 0 20px;
+    font-size: 15px;
+    font-weight: 600;
+    color: #dc3545;
+}
+
+.summary-box {
+    display: inline-block;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+}
+
+.summary-label {
+    font-size: 13px;
+    color: #777;
+}
+
+.summary-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #dc3545;
+}
+
+/* Apple-style minimal footer */
+.app-footer {
+    margin-top: auto;
+    text-align: center;
+    font-size: 12px;
+    color: #a0a6ad;
+    padding: 18px 0;
+    border-top: 1px solid #e9ecef;
+    background: transparent;
+}

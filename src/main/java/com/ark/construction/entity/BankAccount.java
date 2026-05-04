@@ -18,6 +18,7 @@ public class BankAccount {
     private String branchName;
     private String upiId;
     private Boolean active = true;
+    private Boolean isDefault = false;
 
     public Long getId() {
         return id;
@@ -81,5 +82,13 @@ public class BankAccount {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Boolean getIsDefault() {
+        return isDefault;
+    }
+
+    public void setIsDefault(Boolean isDefault) {
+        this.isDefault = isDefault;
     }
 }

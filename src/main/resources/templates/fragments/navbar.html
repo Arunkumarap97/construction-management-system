@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <body>
 <div th:fragment="navbar">
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
         <div class="container-fluid">
 
-            <a class="navbar-brand fw-bold" href="/dashboard">
-                ARK Builders
+            <a class="navbar-brand brand-box" href="/dashboard">
+                <span class="brand-main">ARK</span>
+                <span class="brand-sub">Builders & Developers</span>
             </a>
+            <&nbsp;>
+            <div class="nav-divider"></div>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
                 <span class="navbar-toggler-icon"></span>
@@ -17,6 +20,9 @@
             <div class="collapse navbar-collapse" id="mainNav">
 
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">Profile</a>
+                    </li>
 
                     <li class="nav-item">
                         <a class="nav-link" href="/dashboard">Dashboard</a>
@@ -33,14 +39,66 @@
                     <li class="nav-item">
                         <a class="nav-link" href="/expenses">Expenses</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/reports">Reports</a>
+                    </li>
 
                 </ul>
 
-                <div class="d-flex gap-2">
-                    <a href="/clients/new" class="btn btn-sm btn-outline-light">+ Client</a>
-                    <a href="/projects/new" class="btn btn-sm btn-outline-light">+ Project</a>
-                    <a href="/expenses/new" class="btn btn-sm btn-outline-light">+ Expense</a>
-                    <a href="/payment-requests/new" class="btn btn-sm btn-outline-light">+ Payment Request</a>
+                <div class="d-flex align-items-center gap-3">
+
+                    <!-- Quick Add (1 button only) -->
+                    <div class="dropdown">
+                        <button class="btn btn-sm btn-outline-light dropdown-toggle"
+                                data-bs-toggle="dropdown">
+                            + Add
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="/clients/new">+ Client</a></li>
+                            <li><a class="dropdown-item" href="/projects/new">+ Project</a></li>
+                            <li><a class="dropdown-item" href="/expenses/new">+ Expense</a></li>
+                            <li><a class="dropdown-item" href="/payment-requests/new">+ Payment Request</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Profile Dropdown -->
+                    <div class="dropdown">
+
+                        <button class="btn btn-sm btn-light dropdown-toggle"
+                                data-bs-toggle="dropdown">
+
+                            👤 <span sec:authentication="name"></span>
+                        </button>
+
+                        <ul class="dropdown-menu dropdown-menu-end">
+
+                            <li>
+                                <a class="dropdown-item" href="/profile">
+                                    Profile
+                                </a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item" href="/profile/change-password">
+                                    Change Password
+                                </a>
+                            </li>
+
+                            <li><hr class="dropdown-divider"></li>
+
+                            <li>
+                                <form th:action="@{/logout}" method="post">
+                                    <button class="dropdown-item text-danger">
+                                        Logout
+                                    </button>
+                                </form>
+                            </li>
+
+                        </ul>
+
+                    </div>
+
                 </div>
 
             </div>

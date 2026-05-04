@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Profile</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+
+<body>
+
+<div th:replace="fragments/navbar :: navbar"></div>
+
+<div class="container mt-5">
+
+    <!-- TOP HEADER -->
+    <div class="d-flex justify-content-between align-items-center top-box">
+        <div>
+            <div class="page-title">Profile Settings</div>
+            <div class="sub-title">Manage user, company and payment settings</div>
+        </div>
+
+    </div>
+
+    <!-- USER + COMPANY CARDS -->
+    <div class="row g-4 mb-4">
+
+        <div class="col-md-6">
+            <div class="list-card p-4 h-100">
+                <h5 class="fw-bold mb-3">User Profile</h5>
+
+                <div class="mb-3">
+                    <small class="text-muted">Logged in as</small>
+                    <div class="fw-semibold" th:text="${username}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <small class="text-muted">Role</small>
+                    <div class="fw-semibold">ADMIN</div>
+                </div>
+
+                <a href="/profile/change-password" class="btn btn-sm btn-outline-primary">
+                    Change Password
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="list-card p-4 h-100">
+                <h5 class="fw-bold mb-3">Company Profile</h5>
+
+                <div class="mb-2">
+                    <small class="text-muted">Company Name</small>
+                    <div class="fw-semibold">ARK Builders and Developers</div>
+                </div>
+
+                <div class="mb-2">
+                    <small class="text-muted">Tagline</small>
+                    <div class="fw-semibold">Building Your Dream Home Together</div>
+                </div>
+
+                <div class="mb-2">
+                    <small class="text-muted">Used In</small>
+                    <div class="fw-semibold">Receipts, Payment Requests, Quotations</div>
+                </div>
+
+                <a href="#" class="btn btn-sm btn-outline-primary disabled">
+                    Edit Company Profile
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- BANK ACCOUNTS -->
+    <div class="list-card">
+
+        <div class="d-flex justify-content-between align-items-center p-4 border-bottom">
+            <div>
+                <h5 class="fw-bold mb-0">Bank Accounts</h5>
+                <small class="text-muted">Used for payment requests and QR generation</small>
+            </div>
+
+            <a href="/profile/banks/new" class="btn btn-sm btn-primary">
+                + Add Bank
+            </a>
+        </div>
+
+        <table class="table align-middle">
+
+            <thead>
+            <tr>
+                <th>Bank</th>
+                <th>Account Holder</th>
+                <th>Account Number</th>
+                <th>UPI</th>
+                <th>Default</th>
+                <th width="180">Action</th>
+            </tr>
+            </thead>
+
+            <tbody>
+
+            <tr th:each="b : ${banks}">
+                <td class="fw-semibold" th:text="${b.bankName}"></td>
+                <td th:text="${b.accountHolder}"></td>
+                <td th:text="${b.accountNumber}"></td>
+                <td th:text="${b.upiId}"></td>
+
+                <td>
+                    <span th:if="${b.isDefault == true}" class="badge bg-success">
+                        Default
+                    </span>
+
+                    <span th:if="${b.isDefault != true}" class="text-muted">
+                        -
+                    </span>
+                </td>
+
+                <td>
+                    <a class="btn btn-sm btn-outline-primary"
+                       th:href="@{'/profile/banks/edit/' + ${b.id}}">
+                        Edit
+                    </a>
+
+                    <a class="btn btn-sm btn-outline-danger"
+                       onclick="return confirm('Delete this bank account?')"
+                       th:href="@{'/profile/banks/delete/' + ${b.id}}">
+                        Delete
+                    </a>
+                </td>
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(banks)}">
+                <td colspan="6" class="text-center text-muted p-5">
+                    No bank accounts added yet
+                </td>
+            </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -64,11 +64,15 @@
                     <div class="mb-4">
                         <label>Bank / UPI Account</label>
                         <select th:field="*{bankAccountId}" class="form-select" required>
+
                             <option value="">Select Bank Account</option>
+
                             <option th:each="b : ${banks}"
                                     th:value="${b.id}"
-                                    th:text="${b.bankName + ' - ' + b.accountHolder}">
+                                    th:text="${b.bankName + ' - ' + b.accountHolder}"
+                                    th:selected="${paymentRequest.bankAccountId == null and b.isDefault}">
                             </option>
+
                         </select>
                     </div>
 

@@ -1,0 +1,11 @@
+package com.ark.construction.repository;
+
+import com.ark.construction.entity.AppUser;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface AppUserRepository extends JpaRepository<AppUser, Long> {
+    Optional<AppUser> findByUsernameAndActiveTrue(String username);
+    Optional<AppUser> findByUsername(String username);
+}

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="navbar">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+        <div class="container-fluid">
+
+            <a class="navbar-brand fw-bold" href="/dashboard">
+                ARK Builders
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="mainNav">
+
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/clients">Clients</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/projects">Projects</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="/expenses">Expenses</a>
+                    </li>
+
+                </ul>
+
+                <div class="d-flex gap-2">
+                    <a href="/clients/new" class="btn btn-sm btn-outline-light">+ Client</a>
+                    <a href="/projects/new" class="btn btn-sm btn-outline-light">+ Project</a>
+                    <a href="/expenses/new" class="btn btn-sm btn-outline-light">+ Expense</a>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+
+</div>
+
+</body>
+</html>

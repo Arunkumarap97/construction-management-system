@@ -2,6 +2,8 @@ package com.ark.construction.entity;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Client {
 
@@ -14,6 +16,8 @@ public class Client {
     private String email;
     private String address;
     private boolean active = true;
+    @OneToMany(mappedBy = "client")
+    private List<Project> projects;
 
     // Getters & Setters
     public Long getId() { return id; }
@@ -42,5 +46,13 @@ public class Client {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 }

@@ -1,8 +1,10 @@
 package com.ark.construction.controller;
 
+import com.ark.construction.entity.Expense;
 import com.ark.construction.entity.Payment;
 import com.ark.construction.entity.Project;
 import com.ark.construction.repository.ClientRepository;
+import com.ark.construction.service.ExpenseService;
 import com.ark.construction.service.PaymentService;
 import com.ark.construction.service.ProjectService;
 import org.springframework.stereotype.Controller;
@@ -17,13 +19,15 @@ public class ProjectController {
     private final ProjectService projectService;
     private final PaymentService paymentService;
     private final ClientRepository clientRepo;
+    private final ExpenseService expenseService;
 
     public ProjectController(ProjectService projectService,
                              PaymentService paymentService,
-                             ClientRepository clientRepo) {
+                             ClientRepository clientRepo, ExpenseService expenseService) {
         this.projectService = projectService;
         this.paymentService = paymentService;
         this.clientRepo = clientRepo;
+        this.expenseService = expenseService;
     }
 
     // 🔹 LIST PROJECTS
@@ -42,15 +46,25 @@ public class ProjectController {
         Project project = projectService.getProject(id);
 
         Double totalPaid = paymentService.getTotalPaid(id);
+        Double totalExpense = expenseService.getTotalExpenseByProject(id);
+
         Double pending = project.getTotalCost() - totalPaid;
+        Double siteBalance = totalPaid - totalExpense;
+        Double estimatedProfit = project.getTotalCost() - totalExpense;
 
         model.addAttribute("project", project);
         model.addAttribute("payments", paymentService.getPaymentsByProject(id));
-        model.addAttribute("totalPaid", totalPaid);
-        model.addAttribute("pending", pending);
-        model.addAttribute("newPayment", new Payment());
+        model.addAttribute("expenses", expenseService.getExpensesByProject(id));
 
-        // 🔴 error handling
+        model.addAttribute("totalPaid", totalPaid);
+        model.addAttribute("totalExpense", totalExpense);
+        model.addAttribute("pending", pending);
+        model.addAttribute("siteBalance", siteBalance);
+        model.addAttribute("estimatedProfit", estimatedProfit);
+
+        model.addAttribute("newPayment", new Payment());
+        model.addAttribute("newExpense", new Expense());
+
         if (error != null) {
             model.addAttribute("error", error);
         }
@@ -120,6 +134,19 @@ public class ProjectController {
                                  @RequestParam Integer progress) {
 
         projectService.updateProgress(id, progress);
+
+        return "redirect:/projects/" + id;
+    }
+
+    @PostMapping("/{id}/expense")
+    public String addExpenseToProject(@PathVariable Long id,
+                                      @ModelAttribute("newExpense") Expense expense,
+                                      RedirectAttributes redirectAttributes) {
+
+        expense.setProjectId(id);
+        expenseService.saveExpense(expense);
+
+        redirectAttributes.addFlashAttribute("success", "Expense added successfully!");
 
         return "redirect:/projects/" + id;
     }

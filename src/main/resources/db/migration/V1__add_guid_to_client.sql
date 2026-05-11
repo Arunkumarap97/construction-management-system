@@ -1,0 +1,14 @@
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+ALTER TABLE client
+ADD COLUMN IF NOT EXISTS guid UUID;
+
+UPDATE client
+SET guid = gen_random_uuid()
+WHERE guid IS NULL;
+
+ALTER TABLE client
+ALTER COLUMN guid SET NOT NULL;
+
+ALTER TABLE client
+ADD CONSTRAINT uk_client_guid UNIQUE (guid);

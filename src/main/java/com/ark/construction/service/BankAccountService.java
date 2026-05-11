@@ -8,6 +8,7 @@ import java.util.List;
 
 @Service
 public class BankAccountService {
+
     private final BankAccountRepository repo;
 
     public BankAccountService(BankAccountRepository repo) {
@@ -15,7 +16,7 @@ public class BankAccountService {
     }
 
     public List<BankAccount> getAll() {
-        return repo.findAll();
+        return repo.findByActiveTrue();
     }
 
     public List<BankAccount> getActive() {
@@ -24,11 +25,16 @@ public class BankAccountService {
 
     public BankAccount save(BankAccount bank) {
 
-        // 🔥 only one default allowed
+        // only one default account allowed
         if (Boolean.TRUE.equals(bank.getIsDefault())) {
-            repo.findByIsDefaultTrue().ifPresent(b -> {
-                b.setIsDefault(false);
-                repo.save(b);
+
+            repo.findByIsDefaultTrue().ifPresent(existing -> {
+
+                // avoid resetting same entity
+                if (!existing.getId().equals(bank.getId())) {
+                    existing.setIsDefault(false);
+                    repo.save(existing);
+                }
             });
         }
 
@@ -40,6 +46,8 @@ public class BankAccountService {
     }
 
     public void delete(Long id) {
-        repo.deleteById(id);
+        BankAccount bank = get(id);
+        bank.setActive(false);
+        repo.save(bank);
     }
 }

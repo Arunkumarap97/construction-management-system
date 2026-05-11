@@ -9,25 +9,30 @@ import java.util.List;
 
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 
-    @Query("SELECT COALESCE(SUM(e.amount), 0) FROM Expense e")
+    @Query("SELECT COALESCE(SUM(e.amount), 0) FROM Expense e WHERE e.active = true")
     Double sumAllExpenses();
 
-    @Query("SELECT COALESCE(SUM(e.amount),0) FROM Expense e")
+    @Query("SELECT COALESCE(SUM(e.amount), 0) FROM Expense e WHERE e.active = true")
     Double getTotalExpense();
 
-    @Query("SELECT COALESCE(SUM(e.amount),0) FROM Expense e WHERE e.project.id = :projectId")
+    @Query("""
+        SELECT COALESCE(SUM(e.amount), 0)
+        FROM Expense e
+        WHERE e.project.id = :projectId
+        AND e.active = true
+    """)
     Double getTotalExpenseByProject(Long projectId);
 
-    List<Expense> findAllByOrderByExpenseDateDesc();
+    List<Expense> findByActiveTrueOrderByExpenseDateDesc();
 
-    List<Expense> findByProject_IdOrderByExpenseDateDesc(Long projectId);
+    List<Expense> findByProject_IdAndActiveTrueOrderByExpenseDateDesc(Long projectId);
 
     @Query("""
-    SELECT COALESCE(SUM(e.amount),0)
-    FROM Expense e
-    WHERE e.project.id = :projectId
-    AND e.expenseDate BETWEEN :start AND :end
-""")
+        SELECT COALESCE(SUM(e.amount), 0)
+        FROM Expense e
+        WHERE e.project.id = :projectId
+        AND e.active = true
+        AND e.expenseDate BETWEEN :start AND :end
+    """)
     Double sumByProjectAndDate(Long projectId, LocalDate start, LocalDate end);
-
 }

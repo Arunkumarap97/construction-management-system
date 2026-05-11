@@ -35,9 +35,19 @@ public class PaymentService {
         Project project = projectRepo.findById(projectId).orElseThrow();
 
         Double totalPaid = getTotalPaid(projectId);
-        Double pending = project.getTotalCost() - totalPaid;
 
-        // ❌ validation
+        if (totalPaid == null) {
+            totalPaid = 0.0;
+        }
+
+        Double totalCost = project.getTotalCost();
+
+        if (totalCost == null) {
+            totalCost = 0.0;
+        }
+
+        Double pending = totalCost - totalPaid;
+
         if (payment.getAmount() == null || payment.getAmount() <= 0) {
             return "invalid_amount";
         }
@@ -46,7 +56,6 @@ public class PaymentService {
             return "overpayment";
         }
 
-        // ✅ default date
         if (payment.getPaymentDate() == null) {
             payment.setPaymentDate(LocalDate.now());
         }

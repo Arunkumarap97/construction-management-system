@@ -21,7 +21,7 @@ public class ExpenseService {
     }
 
     public List<Expense> getAllExpenses() {
-        return expenseRepo.findAllByOrderByExpenseDateDesc();
+        return expenseRepo.findByActiveTrueOrderByExpenseDateDesc();
     }
 
     public Double totalExpenseAll() {
@@ -64,7 +64,9 @@ public class ExpenseService {
     }
 
     public void deleteExpense(Long id) {
-        expenseRepo.deleteById(id);
+        Expense expense = getExpenseById(id);
+        expense.setActive(false);
+        expenseRepo.save(expense);
     }
     //
 
@@ -74,6 +76,6 @@ public class ExpenseService {
     }
 
     public List<Expense> getExpensesByProject(Long projectId) {
-        return expenseRepo.findByProject_IdOrderByExpenseDateDesc(projectId);
+        return expenseRepo.findByProject_IdAndActiveTrueOrderByExpenseDateDesc(projectId);
     }
 }

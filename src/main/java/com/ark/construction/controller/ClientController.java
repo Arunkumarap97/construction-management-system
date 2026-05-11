@@ -67,4 +67,13 @@
             return "client/client-detail";
         }
 
+        // EDIT CLIENT FORM
+        @GetMapping("/edit/{id}")
+        public String editClient(@PathVariable Long id, Model model) {
+
+            Client client = service.getClientById(id);
+            model.addAttribute("client", client);
+            return "client-form";
+        }
+
     }

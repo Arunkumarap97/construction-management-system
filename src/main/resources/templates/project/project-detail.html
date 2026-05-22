@@ -79,30 +79,127 @@
 
 
     <!-- PROGRESS BAR -->
+<!--    <div class="card p-3 mb-4">-->
+<!--        <div class="d-flex justify-content-between align-items-center">-->
+<!--            <div>Progress</div>-->
+
+<!--            <form th:action="@{'/projects/' + ${project.id} + '/progress'}"-->
+<!--                  method="post"-->
+<!--                  class="d-flex gap-2">-->
+
+<!--                <input type="number"-->
+<!--                       name="progress"-->
+<!--                       class="form-control form-control-sm"-->
+<!--                       style="width: 80px"-->
+<!--                       min="0" max="100"-->
+<!--                       th:value="${project.progressPercent}">-->
+
+<!--                <button class="btn btn-sm btn-warning">Update</button>-->
+<!--            </form>-->
+<!--        </div>-->
+
+<!--        <div class="progress mt-2">-->
+<!--            <div class="progress-bar bg-success"-->
+<!--                 th:style="'width:' + ${project.progressPercent} + '%'"-->
+<!--                 th:text="${project.progressPercent + '%'}">-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
     <div class="card p-3 mb-4">
-        <div class="d-flex justify-content-between align-items-center">
-            <div>Progress</div>
 
-            <form th:action="@{'/projects/' + ${project.id} + '/progress'}"
-                  method="post"
-                  class="d-flex gap-2">
-
-                <input type="number"
-                       name="progress"
-                       class="form-control form-control-sm"
-                       style="width: 80px"
-                       min="0" max="100"
-                       th:value="${project.progressPercent}">
-
-                <button class="btn btn-sm btn-warning">Update</button>
-            </form>
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <div>
+                <strong>Overall Progress</strong>
+            </div>
+            <span class="badge bg-success"
+                  th:text="${project.progressPercent + '%'}">0%</span>
         </div>
 
-        <div class="progress mt-2">
+        <div class="progress mb-4">
             <div class="progress-bar bg-success"
                  th:style="'width:' + ${project.progressPercent} + '%'"
                  th:text="${project.progressPercent + '%'}">
             </div>
+        </div>
+
+        <h6 class="mb-3">Site Progress Stages</h6>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm align-middle">
+                <thead class="table-light">
+                <tr>
+                    <th>Stage</th>
+                    <th style="width: 120px;">Progress</th>
+                    <th style="width: 150px;">Status</th>
+                    <th>Remarks</th>
+                    <th style="width: 90px;">Action</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="progress : ${progressList}">
+
+                    <form th:action="@{'/projects/progress/' + ${progress.id} + '/update'}"
+                          method="post">
+
+                        <td>
+                            <span th:if="${progress.floorName != null}"
+                                  th:text="${progress.floorName + ' - ' + progress.workStage.stageName}">
+                            </span>
+
+                            <span th:if="${progress.floorName == null}"
+                                  th:text="${progress.workStage.stageName}">
+                             </span>
+                        </td>
+
+                        <td>
+                            <input type="number"
+                                   name="progressPercentage"
+                                   class="form-control form-control-sm"
+                                   min="0"
+                                   max="100"
+                                   th:value="${progress.progressPercentage}">
+                        </td>
+
+                        <td>
+                            <select name="status" class="form-select form-select-sm">
+                                <option value="PENDING"
+                                        th:selected="${progress.status == 'PENDING'}">
+                                    Pending
+                                </option>
+                                <option value="IN_PROGRESS"
+                                        th:selected="${progress.status == 'IN_PROGRESS'}">
+                                    In Progress
+                                </option>
+                                <option value="COMPLETED"
+                                        th:selected="${progress.status == 'COMPLETED'}">
+                                    Completed
+                                </option>
+                                <option value="ON_HOLD"
+                                        th:selected="${progress.status == 'ON_HOLD'}">
+                                    On Hold
+                                </option>
+                            </select>
+                        </td>
+
+                        <td>
+                            <input type="text"
+                                   name="remarks"
+                                   class="form-control form-control-sm"
+                                   th:value="${progress.remarks}">
+                        </td>
+
+                        <td>
+                            <button type="submit" class="btn btn-sm btn-primary">
+                                Save
+                            </button>
+                        </td>
+
+                    </form>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 

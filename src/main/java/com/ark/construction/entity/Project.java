@@ -44,4 +44,17 @@ public class Project extends BaseEntity {
 
     @OneToMany(mappedBy = "project")
     private List<Expense> expenses;
+
+    @ManyToOne
+    @JoinColumn(name = "project_type_id")
+    private ProjectType projectType;
+
+    // For multi-storey buildings
+    private Integer numberOfFloors;
+
+    // Optional short work scope
+    @Column(columnDefinition = "TEXT")
+    private String workScope;
+
+
 }

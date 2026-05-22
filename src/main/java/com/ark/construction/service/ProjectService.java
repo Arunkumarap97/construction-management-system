@@ -2,8 +2,10 @@ package com.ark.construction.service;
 
 import com.ark.construction.entity.Client;
 import com.ark.construction.entity.Project;
+import com.ark.construction.entity.ProjectType;
 import com.ark.construction.repository.ClientRepository;
 import com.ark.construction.repository.ProjectRepository;
+import com.ark.construction.repository.ProjectTypeRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,11 +15,15 @@ public class ProjectService {
 
     private final ProjectRepository projectRepo;
     private final ClientRepository clientRepo;
+    private final ProjectProgressService projectProgressService;
+    private final ProjectTypeRepository projectTypeRepository;
 
     public ProjectService(ProjectRepository projectRepo,
-                          ClientRepository clientRepo) {
+                          ClientRepository clientRepo, ProjectProgressService projectProgressService, ProjectTypeRepository projectTypeRepository) {
         this.projectRepo = projectRepo;
         this.clientRepo = clientRepo;
+        this.projectProgressService = projectProgressService;
+        this.projectTypeRepository = projectTypeRepository;
     }
 
     public List<Project> getAllProjects() {
@@ -35,8 +41,21 @@ public class ProjectService {
             Client client = clientRepo.findById(project.getClientId()).orElse(null);
             project.setClient(client);
         }
+        if (project.getProjectType() != null &&
+                project.getProjectType().getId() != null) {
 
-        return projectRepo.save(project);
+            ProjectType type = projectTypeRepository
+                    .findById(project.getProjectType().getId())
+                    .orElseThrow(() -> new RuntimeException("Project type not found"));
+
+            project.setProjectType(type);
+        }
+
+        // save project
+        Project savedProject = projectRepo.save(project);
+        // create default progress stages
+        projectProgressService.createDefaultProgressForProject(savedProject);
+        return savedProject;
     }
 
     public void updateProgress(Long projectId, Integer progress) {

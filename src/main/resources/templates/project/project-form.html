@@ -75,20 +75,51 @@
                     </div>
 
                     <!-- ROW 3 -->
+<!--                    <div class="row">-->
+<!--                        <div class="col-md-6 mb-4">-->
+<!--                            <label>Progress (%)</label>-->
+<!--                            <input type="number" class="form-control"-->
+<!--                                   min="0" max="100"-->
+<!--                                   placeholder="0 - 100"-->
+<!--                                   th:field="*{progressPercent}">-->
+<!--                        </div>-->
+
+<!--                        <div class="col-md-6 mb-4">-->
+<!--                            <label>Location</label>-->
+<!--                            <input type="text" class="form-control"-->
+<!--                                   placeholder="Project location"-->
+<!--                                   th:field="*{location}">-->
+<!--                        </div>-->
+<!--                    </div>-->
+
+                    <!-- ROW 3 -->
                     <div class="row">
                         <div class="col-md-6 mb-4">
-                            <label>Progress (%)</label>
-                            <input type="number" class="form-control"
-                                   min="0" max="100"
-                                   placeholder="0 - 100"
-                                   th:field="*{progressPercent}">
+                            <label>Project Type</label>
+
+                            <select class="form-select"
+                                    id="projectTypeSelect"
+                                    th:field="*{projectType.id}"
+                                    required>
+
+                                <option value="">Select Project Type</option>
+
+                                <option th:each="type : ${projectTypes}"
+                                        th:value="${type.id}"
+                                        th:text="${type.typeName}"
+                                        th:attr="data-type-name=${type.typeName}">
+                                </option>
+                            </select>
                         </div>
 
-                        <div class="col-md-6 mb-4">
-                            <label>Location</label>
-                            <input type="text" class="form-control"
-                                   placeholder="Project location"
-                                   th:field="*{location}">
+                        <div class="col-md-6 mb-4" id="floorsField">
+                            <label>No. of Floors</label>
+                            <input type="number"
+                                   class="form-control"
+                                   min="0"
+                                   placeholder="Example: 1, 2, 3"
+                                   th:field="*{numberOfFloors}">
+                            <small class="text-muted">Use 0 if not applicable</small>
                         </div>
                     </div>
 
@@ -111,5 +142,29 @@
 </div>
 <div th:replace="fragments/footer :: footer"></div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function toggleFloorsField() {
+        const select = document.getElementById("projectTypeSelect");
+        const floorsField = document.getElementById("floorsField");
+        const floorsInput = floorsField.querySelector("input");
+
+        const selectedOption = select.options[select.selectedIndex];
+        const typeName = selectedOption.getAttribute("data-type-name");
+
+        if (typeName === "Interior" || typeName === "Maintenance") {
+            floorsField.style.display = "none";
+            floorsInput.value = 0;
+        } else {
+            floorsField.style.display = "block";
+
+            if (!floorsInput.value || floorsInput.value == 0) {
+                floorsInput.value = 1;
+            }
+        }
+    }
+    document.addEventListener("DOMContentLoaded", toggleFloorsField);
+    document.getElementById("projectTypeSelect")
+        .addEventListener("change", toggleFloorsField);
+</script>
 </body>
 </html>

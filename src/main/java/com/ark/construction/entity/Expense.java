@@ -31,4 +31,7 @@ public class Expense extends BaseEntity {
 
     @Transient
     private Long projectId;
+
+    @Column(nullable = false)
+    private Boolean active = true;
 }

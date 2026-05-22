@@ -3,17 +3,18 @@ package com.ark.construction.controller;
 import com.ark.construction.entity.Expense;
 import com.ark.construction.entity.Payment;
 import com.ark.construction.entity.Project;
+import com.ark.construction.entity.ProjectProgress;
 import com.ark.construction.repository.ClientRepository;
-import com.ark.construction.service.ExpenseService;
-import com.ark.construction.service.PaymentService;
-import com.ark.construction.service.PdfService;
-import com.ark.construction.service.ProjectService;
+import com.ark.construction.repository.ProjectTypeRepository;
+import com.ark.construction.service.*;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/projects")
@@ -24,15 +25,20 @@ public class ProjectController {
     private final ClientRepository clientRepo;
     private final ExpenseService expenseService;
     private final PdfService pdfService;
+    private final ProjectProgressService projectProgressService;
+    private final ProjectTypeRepository projectTypeRepository;
 
     public ProjectController(ProjectService projectService,
                              PaymentService paymentService,
-                             ClientRepository clientRepo, ExpenseService expenseService, PdfService pdfService) {
+                             ClientRepository clientRepo, ExpenseService expenseService, PdfService pdfService,
+                             ProjectProgressService projectProgressService, ProjectTypeRepository projectTypeRepository) {
         this.projectService = projectService;
         this.paymentService = paymentService;
         this.clientRepo = clientRepo;
         this.expenseService = expenseService;
         this.pdfService = pdfService;
+        this.projectProgressService = projectProgressService;
+        this.projectTypeRepository = projectTypeRepository;
     }
 
     // 🔹 LIST PROJECTS
@@ -74,6 +80,11 @@ public class ProjectController {
             model.addAttribute("error", error);
         }
 
+        List<ProjectProgress> progressList =
+                projectProgressService.getProgressByProject(id);
+        model.addAttribute("progressList", progressList);
+
+
         return "project/project-detail";
     }
 
@@ -101,6 +112,8 @@ public class ProjectController {
     public String showProjectForm(Model model) {
         model.addAttribute("project", new Project());
         model.addAttribute("clients", clientRepo.findByActiveTrue());
+        model.addAttribute("projectTypes",
+                projectTypeRepository.findByActiveTrueOrderByTypeNameAsc());
         return "project/project-form";
     }
 
@@ -130,6 +143,8 @@ public class ProjectController {
 
         model.addAttribute("project", project);
         model.addAttribute("clients", clientRepo.findByActiveTrue());
+        model.addAttribute("projectTypes",
+                projectTypeRepository.findByActiveTrueOrderByTypeNameAsc());
 
         return "project/project-form"; // reuse same form
     }
@@ -180,5 +195,20 @@ public class ProjectController {
                 .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdf);
+    }
+    //
+
+    @PostMapping("/progress/{progressId}/update")
+    public String updateStageProgress(@PathVariable Long progressId,
+                                      @RequestParam Integer progressPercentage,
+                                      @RequestParam String status,
+                                      @RequestParam(required = false) String remarks) {
+        Long projectId = projectProgressService.updateStageProgress(
+                progressId,
+                progressPercentage,
+                status,
+                remarks
+        );
+        return "redirect:/projects/" + projectId;
     }
 }

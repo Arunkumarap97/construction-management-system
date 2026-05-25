@@ -6,6 +6,7 @@ import com.ark.construction.repository.ExpenseRepository;
 import com.ark.construction.repository.ProjectRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -44,9 +45,11 @@ public class ExpenseService {
             // ✅ NEW CASE
             expense = new Expense();
         }
-
-        // copy fields manually
-        expense.setExpenseDate(formExpense.getExpenseDate());
+        if (formExpense.getExpenseDate() == null) {
+            expense.setExpenseDate(LocalDate.now());
+        } else {
+            expense.setExpenseDate(formExpense.getExpenseDate());
+        }
         expense.setCategory(formExpense.getCategory());
         expense.setVendorName(formExpense.getVendorName());
         expense.setAmount(formExpense.getAmount());

@@ -419,3 +419,8 @@ label {
     border-top: 1px solid #e9ecef;
     background: transparent;
 }
+.mode-badge{display:inline-block;padding:2px 8px;border-radius:100px;font-size:11px;font-weight:500}
+.cash{background:#EAF3DE;color:#3B6D11}
+.upi{background:#E6F1FB;color:#185FA5}
+.bank{background:#EEEDFE;color:#3C3489}
+.cheque{background:#FAEEDA;color:#633806}

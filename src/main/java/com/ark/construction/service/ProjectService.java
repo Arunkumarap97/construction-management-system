@@ -14,23 +14,23 @@ public class ProjectService {
     private final ProjectRepository projectRepo;
     private final ClientRepository clientRepo;
 
-    public ProjectService(ProjectRepository projectRepo,
-                          ClientRepository clientRepo) {
+    public ProjectService(ProjectRepository projectRepo, ClientRepository clientRepo) {
         this.projectRepo = projectRepo;
         this.clientRepo = clientRepo;
     }
 
+    // Active Projects Only
     public List<Project> getAllProjects() {
-        return projectRepo.findAll();
+        return projectRepo.findByActiveTrue();
     }
 
-    public Project getProject(Long id) {
-        return projectRepo.findById(id).orElseThrow();
+    // Find Project by GUID
+    public Project getProject(String guid) {
+        return projectRepo.findByGuidAndActiveTrue(guid).orElseThrow(() -> new RuntimeException("Project not found"));
     }
 
     public Project saveProject(Project project) {
 
-        // 🔥 map clientId → client
         if (project.getClientId() != null) {
             Client client = clientRepo.findById(project.getClientId()).orElse(null);
             project.setClient(client);
@@ -39,12 +39,11 @@ public class ProjectService {
         return projectRepo.save(project);
     }
 
-    public void updateProgress(Long projectId, Integer progress) {
+    // Update Progress using GUID
+    public void updateProgress(String guid, Integer progress) {
 
-        Project project = projectRepo.findById(projectId)
-                .orElseThrow(() -> new RuntimeException("Project not found"));
+        Project project = getProject(guid);
 
-        // ✅ validation
         if (progress == null) {
             throw new IllegalArgumentException("Progress cannot be null");
         }
@@ -57,4 +56,20 @@ public class ProjectService {
 
         projectRepo.save(project);
     }
+
+    // Soft Delete using GUID
+    public void deleteProject(String guid) {
+
+        Project project = getProject(guid);
+
+        project.setActive(false);
+
+        projectRepo.save(project);
+    }
+
+    //
+    public Project getActiveProject(String guid) {
+        return projectRepo.findByGuidAndActiveTrue(guid).orElseThrow(() -> new RuntimeException("Project not found"));
+    }
+
 }

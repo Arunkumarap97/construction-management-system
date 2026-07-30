@@ -60,8 +60,19 @@
                 </td>
 
                 <td>
-                    <a th:href="@{'/projects/' + ${p.id}}" class="btn btn-sm btn-outline-success">View</a>
-                    <a th:href="@{'/projects/edit/' + ${p.id}}" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <a th:href="@{'/projects/' + ${p.guid}}" class="btn btn-sm btn-outline-success">View</a>
+                    <a th:href="@{'/projects/edit/' + ${p.guid}}" class="btn btn-sm btn-outline-primary">Edit</a>
+                    <a th:if="${p.active}"
+                       th:href="@{'/projects/delete/' + ${p.guid}}"
+                       onclick="return confirm('Archive this project?');"
+                       class="btn btn-sm btn-outline-danger">
+                        Archive
+                    </a>
+
+                    <span th:if="${!p.active}"
+                          class="btn btn-sm btn-secondary disabled">
+    Archived
+</span>
                 </td>
             </tr>
 

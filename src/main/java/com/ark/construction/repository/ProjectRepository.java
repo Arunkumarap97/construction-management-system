@@ -4,6 +4,9 @@ import com.ark.construction.entity.Project;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     Long countByStatus(String status);
@@ -16,5 +19,14 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             GROUP BY p.totalCost
             """)
     Double pendingByProject(Long projectId);
+
+    // Active Projects
+    List<Project> findByActiveTrue();
+
+    // Find by GUID (NEW)
+    Optional<Project> findByGuidAndActiveTrue(String guid);
+
+    // Optional: Find by GUID irrespective of active status
+    Optional<Project> findByGuid(String guid);
 
 }

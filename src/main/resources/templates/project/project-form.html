@@ -23,7 +23,7 @@
                     <div class="icon-circle">🏗️</div>
 
                     <h3 class="form-title"
-                        th:text="${project.id != null ? 'Edit Project' : 'Add New Project'}">
+                        th:text="${project.guid != null ? 'Edit Project' : 'Add New Project'}">
                     </h3>
 
                     <div class="sub-text">
@@ -96,8 +96,9 @@
                     <div class="d-flex justify-content-between mt-4">
                         <a href="/projects" class="btn btn-outline-secondary btn-back">← Back</a>
 
-                        <button type="submit" class="btn btn-save text-white"
-                                th:text="${project.id != null ? 'Update Project' : 'Save Project'}">
+                        <button type="submit"
+                                class="btn btn-save text-white"
+                                th:text="${project.guid != null ? 'Update Project' : 'Save Project'}">
                         </button>
                     </div>
 

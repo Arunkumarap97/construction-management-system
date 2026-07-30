@@ -25,9 +25,7 @@ public class ProjectController {
     private final ExpenseService expenseService;
     private final PdfService pdfService;
 
-    public ProjectController(ProjectService projectService,
-                             PaymentService paymentService,
-                             ClientRepository clientRepo, ExpenseService expenseService, PdfService pdfService) {
+    public ProjectController(ProjectService projectService, PaymentService paymentService, ClientRepository clientRepo, ExpenseService expenseService, PdfService pdfService) {
         this.projectService = projectService;
         this.paymentService = paymentService;
         this.clientRepo = clientRepo;
@@ -43,23 +41,23 @@ public class ProjectController {
     }
 
     // 🔹 PROJECT DETAIL PAGE
-    @GetMapping("/{id}")
-    public String projectDetail(@PathVariable Long id,
-                                Model model,
-                                @RequestParam(required = false) String error) {
+    @GetMapping("/{guid}")
+    public String projectDetail(@PathVariable String guid, Model model, @RequestParam(required = false) String error) {
 
-        Project project = projectService.getProject(id);
+        Project project = projectService.getProject(guid);
 
-        Double totalPaid = paymentService.getTotalPaid(id);
-        Double totalExpense = expenseService.getTotalExpenseByProject(id);
+        Long projectId = project.getId();
+
+        Double totalPaid = paymentService.getTotalPaid(projectId);
+        Double totalExpense = expenseService.getTotalExpenseByProject(projectId);
 
         Double pending = project.getTotalCost() - totalPaid;
         Double siteBalance = totalPaid - totalExpense;
         Double estimatedProfit = project.getTotalCost() - totalExpense;
 
         model.addAttribute("project", project);
-        model.addAttribute("payments", paymentService.getPaymentsByProject(id));
-        model.addAttribute("expenses", expenseService.getExpensesByProject(id));
+        model.addAttribute("payments", paymentService.getPaymentsByProject(projectId));
+        model.addAttribute("expenses", expenseService.getExpensesByProject(projectId));
 
         model.addAttribute("totalPaid", totalPaid);
         model.addAttribute("totalExpense", totalExpense);
@@ -78,22 +76,22 @@ public class ProjectController {
     }
 
     // 🔹 ADD PAYMENT
-    @PostMapping("/{id}/payment")
-    public String addPayment(@PathVariable Long id,
-                             @ModelAttribute Payment payment, RedirectAttributes redirectAttributes) {
+    @PostMapping("/{guid}/payment")
+    public String addPayment(@PathVariable String guid, @ModelAttribute Payment payment, RedirectAttributes redirectAttributes) {
 
-        // 🔥 VERY IMPORTANT FIX (prevents stale entity error)
         payment.setId(null);
-        String result = paymentService.addPayment(id, payment);
+
+        Project project = projectService.getProject(guid);
+
+        String result = paymentService.addPayment(project.getId(), payment);
 
         if (!result.equals("success")) {
-            return "redirect:/projects/" + id + "?error=" + result;
+            return "redirect:/projects/" + guid + "?error=" + result;
         }
 
-        // ✅ SUCCESS MESSAGE
         redirectAttributes.addFlashAttribute("success", "Payment added successfully!");
 
-        return "redirect:/projects/" + id;
+        return "redirect:/projects/" + guid;
     }
 
     // 🔹 SHOW PROJECT FORM
@@ -110,20 +108,17 @@ public class ProjectController {
 
         // 🔥 set client from ID
         if (project.getClientId() != null) {
-            project.setClient(
-                    clientRepo.findById(project.getClientId()).orElse(null)
-            );
+            project.setClient(clientRepo.findById(project.getClientId()).orElse(null));
         }
         projectService.saveProject(project);
         return "redirect:/projects";
     }
 
-    @GetMapping("/edit/{id}")
-    public String editProject(@PathVariable Long id, Model model) {
+    @GetMapping("/edit/{guid}")
+    public String editProject(@PathVariable String guid, Model model) {
 
-        Project project = projectService.getProject(id);
+        Project project = projectService.getProject(guid);
 
-        // 🔥 IMPORTANT
         if (project.getClient() != null) {
             project.setClientId(project.getClient().getId());
         }
@@ -131,29 +126,29 @@ public class ProjectController {
         model.addAttribute("project", project);
         model.addAttribute("clients", clientRepo.findByActiveTrue());
 
-        return "project/project-form"; // reuse same form
+        return "project/project-form";
     }
 
-    @PostMapping("/{id}/progress")
-    public String updateProgress(@PathVariable Long id,
-                                 @RequestParam Integer progress) {
+    @PostMapping("/{guid}/progress")
+    public String updateProgress(@PathVariable String guid, @RequestParam Integer progress) {
 
-        projectService.updateProgress(id, progress);
+        projectService.updateProgress(guid, progress);
 
-        return "redirect:/projects/" + id;
+        return "redirect:/projects/" + guid;
     }
 
-    @PostMapping("/{id}/expense")
-    public String addExpenseToProject(@PathVariable Long id,
-                                      @ModelAttribute("newExpense") Expense expense,
-                                      RedirectAttributes redirectAttributes) {
+    @PostMapping("/{guid}/expense")
+    public String addExpenseToProject(@PathVariable String guid, @ModelAttribute("newExpense") Expense expense, RedirectAttributes redirectAttributes) {
 
-        expense.setProjectId(id);
+        Project project = projectService.getProject(guid);
+
+        expense.setProjectId(project.getId());
+
         expenseService.saveExpense(expense);
 
         redirectAttributes.addFlashAttribute("success", "Expense added successfully!");
 
-        return "redirect:/projects/" + id;
+        return "redirect:/projects/" + guid;
     }
 
     @GetMapping("/payments/{paymentId}/receipt")
@@ -176,9 +171,15 @@ public class ProjectController {
 
         String fileName = projectName + "_Payment_" + payment.getPaymentDate() + ".pdf";
 
-        return ResponseEntity.ok()
-                .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
-                .contentType(MediaType.APPLICATION_PDF)
-                .body(pdf);
+        return ResponseEntity.ok().header("Content-Disposition", "attachment; filename=\"" + fileName + "\"").contentType(MediaType.APPLICATION_PDF).body(pdf);
+    }
+
+    //
+    @GetMapping("/delete/{guid}")
+    public String deleteProject(@PathVariable String guid) {
+
+        projectService.deleteProject(guid);
+
+        return "redirect:/projects";
     }
 }
